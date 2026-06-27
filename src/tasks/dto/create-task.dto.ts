@@ -1,4 +1,4 @@
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class CreateTaskDto {
   @IsString()
@@ -10,4 +10,8 @@ export class CreateTaskDto {
   @IsDateString()
   @IsOptional()
   completed_at?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  completed?: boolean;
 }

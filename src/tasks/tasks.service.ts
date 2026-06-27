@@ -85,6 +85,23 @@ export class TasksService {
     });
   }
 
+  async updateStatus(id: number, updateTaskDto: UpdateTaskDto) {
+    const task = await this.prisma.task.findUnique({
+      where: { id },
+    });
+
+    if (!task)
+      throw new NotFoundException(`Task não encontrada para o ID: ${id}.`);
+
+    return this.prisma.task.update({
+      where: { id },
+      data: {
+        completed: updateTaskDto.completed,
+        completed_at: updateTaskDto.completed ? new Date() : null,
+      },
+    });
+  }
+
   async remove(id: number) {
     const task = await this.prisma.task.findUnique({
       where: { id },

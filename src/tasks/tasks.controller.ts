@@ -56,4 +56,9 @@ export class TasksController {
   remove(@Param('id') id: string) {
     return this.tasksService.remove(+id);
   }
+
+  @Patch(':id/complete')
+  updateStatus(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+    return this.tasksService.updateStatus(+id, updateTaskDto);
+  }
 }
