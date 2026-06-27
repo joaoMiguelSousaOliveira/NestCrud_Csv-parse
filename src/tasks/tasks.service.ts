@@ -85,7 +85,20 @@ export class TasksService {
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} task`;
+  async remove(id: number) {
+    const task = await this.prisma.task.findUnique({
+      where: { id },
+    });
+
+    if (!task)
+      throw new NotFoundException(
+        `REMOVE Não foram encontradas Tasks para o id: ${id}.`,
+      );
+
+    await this.prisma.task.delete({
+      where: { id },
+    });
+
+    return { message: `Task de ID: ${id} deletada!`, data: task };
   }
 }
