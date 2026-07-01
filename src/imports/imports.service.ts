@@ -39,13 +39,11 @@ export class ImportsService {
   private async saveToDatabase(rows: CreateImportDto[]) {
     const result = await this.prisma.task.createMany({
       data: rows.map((row) => ({
-        id: Number(row.id),
-        completed: Boolean(row.completed),
+        completed:
+          String(row.completed).toUpperCase() === 'TRUE' ? true : false,
         completed_at: row.completed_at ? new Date(row.completed_at) : null,
-        created_at: row.created_at ? new Date(row.created_at) : new Date(),
         description: row.description,
         title: row.title,
-        updated_at: row.updated_at ? new Date(row.updated_at) : new Date(),
       })),
       skipDuplicates: true,
     });
