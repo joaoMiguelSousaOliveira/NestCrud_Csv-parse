@@ -37,16 +37,24 @@ export class ImportsService {
   }
 
   private async saveToDatabase(rows: CreateImportDto[]) {
-    const result = await this.prisma.task.createMany({
-      data: rows.map((row) => ({
-        completed:
-          String(row.completed).toUpperCase() === 'TRUE' ? true : false,
-        completed_at: row.completed_at ? new Date(row.completed_at) : null,
-        description: row.description,
-        title: row.title,
-      })),
-      skipDuplicates: true,
-    });
-    return result;
+    try {
+      const result = await this.prisma.task.createMany({
+        data: rows.map((row) => ({
+          completed:
+            String(row.completed).toUpperCase() === 'TRUE' ? true : false,
+          completed_at: row.completed_at ? new Date(row.completed_at) : null,
+          description: row.description,
+          title: row.title,
+        })),
+        skipDuplicates: true,
+      });
+      return result;
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Erro desconhecido';
+      throw new BadRequestException(
+        `Erro ao salvar no banco de dados: ${message}`,
+      );
+    }
   }
 }
